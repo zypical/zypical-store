@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Store</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body class="container">
+    <h2 class="heading">Join Virtual Bazaar</h2>
+
+    <div class="form-style-5">
+        <form id="myForm">
+        <fieldset>
+            <input hidden name="createdBy" value="5eff97b9c99ede34e404d08f">
+            <input hidden name="managedBy" value="5eff97b9c99ede34e404d08f">
+
+            <legend><span class="number">2</span>Upload a Product</legend>
+
+            <div> Select images: <input type="file" name="images" multiple></div><br>
+            <input hidden id="store" name="store" >
+            <input type="text" name="name" required placeholder="Name *">
+            <input type="number" name="price" required placeholder="Price *">
+            <textarea name="description" maxlength="300" required placeholder="Describe your product" max="300"></textarea>
+            
+            
+  
+        </fieldset>
+        <fieldset>
+        <!-- <legend><span class="number">2</span> Additional Info</legend>
+        <textarea name="field3" placeholder="About Your School"></textarea>
+        </fieldset> -->
+        <input type="submit" value="Upload" />
+        </form>
+        </div>
+</body>
+<script>
+    window.addEventListener( "load", function () {
+    function sendData() {
+        const XHR = new XMLHttpRequest();
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const id = urlParams.get('id')
+        document.getElementById("store").value = id;
+
+        console.log(id);
+
+        // Bind the FormData object and the form element
+        const FD = new FormData( form );
+
+        // Define what happens on successful data submission
+        XHR.addEventListener( "load", function(event) {
+            const json = JSON.parse(event.target.response );
+            console.log(json);
+            
+            const r = confirm("Do you want to upload another product? ");
+            // if (r == true) {
+            //     window.location.replace("uploadProduct.html?id="+ id);
+            // } else {
+            //     window.location.replace("confirm.html?id="+ id);
+            // }
+        } );
+
+        // Define what happens in case of error
+        XHR.addEventListener( "error", function( event ) {
+        alert( 'Oops! Something went wrong.' );
+        console.log(event);
+        
+        } );
+
+        // Set up our request
+        XHR.open( "POST", "http://localhost:3000/api/product/add" );
+
+        // The data sent is what the user provided in the form
+        console.log(json);
+        
+        XHR.send( FD );
+
+    }
+    
+    // Access the form element...
+    const form = document.getElementById( "myForm" );
+
+    // ...and take over its submit event.
+        form.addEventListener( "submit", function ( event ) {
+            event.preventDefault();
+
+            sendData();
+        } );
+    } );
+    
+</script>
+</html>

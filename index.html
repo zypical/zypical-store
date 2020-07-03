@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Store</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body class="container">
+    <h2 class="heading">Join Virtual Bazaar</h2>
+
+    <div class="form-style-5">
+        <form id="myForm">
+        <fieldset>
+            <input hidden name="createdBy" value="5eff97b9c99ede34e404d08f">
+            <input hidden name="managedBy" value="5eff97b9c99ede34e404d08f">
+
+            <legend><span class="number">1</span> Store Info</legend>
+
+            <input type="text" name="name" required placeholder="Store Name *">
+            <input type="text" name="handle" required placeholder="Store username *">
+            <input type="text" name="handle" required placeholder="Instagram username *">
+
+            <input type="email" name="email" required placeholder="Your/Business Email *">
+            <input type="text" name="contactNumber"  placeholder="Contact Number (if any)">
+
+            <textarea name="description" required placeholder="Describe your store" max="300"></textarea>
+            
+            
+            <fieldset>
+                <legend>Transaction Method</legend>
+                <div>
+                    <label for="Metro Manila">Metro Manila</label>
+                    <input type="checkbox" name="transactionMethod" value="Metro Manila">
+                  </div>
+                  <div>
+                    <label for="Nationwide">Nationwide</label>
+                    <input type="checkbox" name="transactionMethod" value="Nationwide">
+                  </div>
+                <div>
+                    <label for="Shipment Nationwide">Shipment </label>
+                  <input type="checkbox" name="transactionMethod" value="Shipment Nationwide">
+                </div>
+                <div>   
+                    <label for="COD">COD</label>
+               
+                  <input type="checkbox"  name="transactionMethod" value="Shipment within Metro Manila">
+                </div>
+                <div>
+                    <label for="Meet Up">Meet Up</label>
+                  <input type="checkbox"  name="transactionMethod" value="Meet Up">
+                </div>
+              </fieldset>
+
+            <label for="job">Category:</label>
+            <select id="job" name="job" required>
+                <optgroup label="Categories">
+                    <option value="Fashion">Fashion</option>
+                    <option value="Fashion Accessories">Fashion Accessories</option>
+                    <option value="Food">Food</option>
+                    <option value="Household">Household</option>
+                    <option value="Green Products">Green Products</option>
+                    <option value="Games">Games</option>
+                    <option value="Baby">Baby</option>
+                    <option value="Shoes">Shoes</option>
+                    <option value="Geadgets">Geadgets</option>
+                    <option value="Geadgets Accessories">Geadgets Accessories</option>
+                    <option value="Entertainment">Entertainment</option>
+                </optgroup>
+            </select>      
+        </fieldset>
+        <fieldset>
+        <!-- <legend><span class="number">2</span> Additional Info</legend>
+        <textarea name="field3" placeholder="About Your School"></textarea>
+        </fieldset> -->
+        <input type="submit" value="JOIN" />
+        </form>
+        </div>
+</body>
+
+<script>
+    window.addEventListener( "load", function () {
+    function sendData() {
+        const XHR = new XMLHttpRequest();
+
+        // Bind the FormData object and the form element
+        const FD = new FormData( form );
+        
+        let object = {};
+        FD.forEach((value, key) => {object[key] = value});
+        let json = JSON.stringify(object);
+        console.log(json);
+
+        // Define what happens on successful data submission
+        XHR.addEventListener( "load", function(event) {
+            const json = JSON.parse(event.target.response );
+            console.log(json);
+            
+            window.location.replace("uploadProduct.html?id="+ json.data);
+        } );
+
+        // Define what happens in case of error
+        XHR.addEventListener( "error", function( event ) {
+        alert( 'Oops! Something went wrong.' );
+        console.log(event);
+        
+        } );
+
+        // Set up our request
+        XHR.open( "POST", "http://localhost:3000/api/store/tempCreate" );
+        XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+        // The data sent is what the user provided in the form
+        
+        XHR.send( json );
+
+    }
+    
+    // Access the form element...
+    const form = document.getElementById( "myForm" );
+
+    // ...and take over its submit event.
+        form.addEventListener( "submit", function ( event ) {
+            event.preventDefault();
+
+            sendData();
+        } );
+    } );
+</script>
+</html>
