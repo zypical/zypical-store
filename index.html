@@ -30,30 +30,25 @@
             <fieldset>
                 <legend>Transaction Method</legend>
                 <div>
-                    <label for="Metro Manila">Metro Manila</label>
-                    <input type="checkbox" name="transactionMethod" value="Metro Manila">
+                    <input type="checkbox" name="transactionMethod" value="Metro Manila">Metro Manila
                   </div>
                   <div>
-                    <label for="Nationwide">Nationwide</label>
-                    <input type="checkbox" name="transactionMethod" value="Nationwide">
+                    <input type="checkbox" name="transactionMethod" value="Nationwide">Nationwide
                   </div>
                 <div>
-                    <label for="Shipment Nationwide">Shipment </label>
-                  <input type="checkbox" name="transactionMethod" value="Shipment Nationwide">
+                  <input type="checkbox" name="transactionMethod" value="Shipment Nationwide">Shipment
                 </div>
-                <div>   
-                    <label for="COD">COD</label>
+                <div>    
                
-                  <input type="checkbox"  name="transactionMethod" value="Shipment within Metro Manila">
+                  <input type="checkbox"  name="transactionMethod" value="Shipment within Metro Manila">COD
                 </div>
-                <div>
-                    <label for="Meet Up">Meet Up</label>
-                  <input type="checkbox"  name="transactionMethod" value="Meet Up">
+                <div> 
+                  <input type="checkbox"  name="transactionMethod" value="Meet Up">Meet Up
                 </div>
               </fieldset>
 
-            <label for="job">Category:</label>
-            <select id="job" name="job" required>
+            <label for="category">Category:</label>
+            <select id="category" name="category" required>
                 <optgroup label="Categories">
                     <option value="Fashion">Fashion</option>
                     <option value="Fashion Accessories">Fashion Accessories</option>
@@ -70,10 +65,8 @@
             </select>      
         </fieldset>
         <fieldset>
-        <!-- <legend><span class="number">2</span> Additional Info</legend>
-        <textarea name="field3" placeholder="About Your School"></textarea>
-        </fieldset> -->
-        <input type="submit" value="JOIN" />
+            
+        <input type="submit" value="CREATE STORE" />
         </form>
         </div>
 </body>
@@ -86,8 +79,17 @@
         // Bind the FormData object and the form element
         const FD = new FormData( form );
         
-        let object = {};
-        FD.forEach((value, key) => {object[key] = value});
+        let object = {transactionMethod: []};
+        FD.forEach((value, key) => {
+            if(key === "transactionMethod"){
+                object["transactionMethod"].push(value)
+            }
+            else {
+                object[key] = value;
+            }
+            console.log(value);
+            
+            });
         let json = JSON.stringify(object);
         console.log(json);
 
@@ -95,19 +97,27 @@
         XHR.addEventListener( "load", function(event) {
             const json = JSON.parse(event.target.response );
             console.log(json);
+
+            if(json.code !== "SUCCESS"){
+                alert( 'Sorry we are not able to add a store at the moment' );
+            }
+            else {
+                alert("Success! Your store ID is "+json.data)
+                window.location.replace("uploadProduct.html?id="+ json.data);
+
+            }
             
-            window.location.replace("uploadProduct.html?id="+ json.data);
         } );
 
         // Define what happens in case of error
         XHR.addEventListener( "error", function( event ) {
-        alert( 'Oops! Something went wrong.' );
+        alert( 'Sorry we are not able to add a store at the moment' );
         console.log(event);
         
         } );
 
         // Set up our request
-        XHR.open( "POST", "http://localhost:3000/api/store/tempCreate" );
+        XHR.open( "POST", "https://qa-zypical-api.herokuapp.com/api/store/tempCreate" );
         XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
         // The data sent is what the user provided in the form

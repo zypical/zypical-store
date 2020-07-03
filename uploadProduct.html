@@ -30,20 +30,25 @@
         <!-- <legend><span class="number">2</span> Additional Info</legend>
         <textarea name="field3" placeholder="About Your School"></textarea>
         </fieldset> -->
-        <input type="submit" value="Upload" />
+        <div class="cluster">
+            <input type="submit" id="submit" value="Upload" />
+            <img src="img/zypical-spinner.gif" class="loader" style="height: 100px;" id="loader" alt="">
+
+        </div>
         </form>
         </div>
 </body>
 <script>
     window.addEventListener( "load", function () {
     function sendData() {
+        console.log("Submitting data...");
+        document.getElementById("loader").style.display = "block";
+        document.getElementById("submit").style.display = "none";
         const XHR = new XMLHttpRequest();
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const id = urlParams.get('id')
         document.getElementById("store").value = id;
-
-        console.log(id);
 
         // Bind the FormData object and the form element
         const FD = new FormData( form );
@@ -52,13 +57,25 @@
         XHR.addEventListener( "load", function(event) {
             const json = JSON.parse(event.target.response );
             console.log(json);
+            console.log(event.target.response);
+            document.getElementById("loader").style.display = "none";
+            document.getElementById("submit").style.display = "block";
             
-            const r = confirm("Do you want to upload another product? ");
-            // if (r == true) {
-            //     window.location.replace("uploadProduct.html?id="+ id);
-            // } else {
-            //     window.location.replace("confirm.html?id="+ id);
-            // }
+
+            if(json.code !== "SUCCESS"){
+                alert( 'Sorry we are not able to add a store at the moment' );
+            }
+            else {
+                const r = confirm("Success! Do you want to upload another product? ");
+                if (r == true) {
+                    window.location.replace("uploadProduct.html?id="+ id);
+                } else {
+                    window.location.replace("confirm.html?id="+ id);
+                }
+
+            }
+            
+           
         } );
 
         // Define what happens in case of error
@@ -69,11 +86,9 @@
         } );
 
         // Set up our request
-        XHR.open( "POST", "http://localhost:3000/api/product/add" );
+        XHR.open( "POST", "https://qa-zypical-api.herokuapp.com/api/product/add" );
 
-        // The data sent is what the user provided in the form
-        console.log(json);
-        
+        // The data sent is what the user provided in the form        
         XHR.send( FD );
 
     }
