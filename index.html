@@ -103,7 +103,7 @@
             }
             else {
                 alert("Success! Your store ID is "+json.data)
-                window.location.replace("uploadProduct.html?id="+ json.data);
+                window.location.replace(`uploadProduct.html?id=${json.data}&&count=0`);
 
             }
             
@@ -117,7 +117,9 @@
         } );
 
         // Set up our request
-        XHR.open( "POST", "https://qa-zypical-api.herokuapp.com/api/store/tempCreate" );
+        const api = "https://qa-zypical-api.herokuapp.com/";
+        // const api = "http://localhost:3000/";
+        XHR.open( "POST", `${api}api/store/tempcreate` );
         XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
         // The data sent is what the user provided in the form

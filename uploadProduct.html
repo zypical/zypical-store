@@ -17,6 +17,13 @@
 
             <legend><span class="number">2</span>Upload a Product</legend>
 
+                
+                <p class="center">You need at least <b>3 products</b> to join the Bazaar</p>
+                <p id="count" class=" center"></p>
+         
+            <hr><br>
+
+
             <div> Select images: <input type="file" name="images" multiple></div><br>
             <input hidden id="store" name="store" >
             <input type="text" name="name" required placeholder="Name *">
@@ -40,14 +47,17 @@
 </body>
 <script>
     window.addEventListener( "load", function () {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const id = urlParams.get('id');
+        const count = urlParams.get('count');
+        document.getElementById("count").innerHTML = `You have ${count} product/s`;
+
     function sendData() {
         console.log("Submitting data...");
         document.getElementById("loader").style.display = "block";
         document.getElementById("submit").style.display = "none";
         const XHR = new XMLHttpRequest();
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const id = urlParams.get('id')
         document.getElementById("store").value = id;
 
         // Bind the FormData object and the form element
@@ -56,23 +66,31 @@
         // Define what happens on successful data submission
         XHR.addEventListener( "load", function(event) {
             const json = JSON.parse(event.target.response );
+            const count = json.data.totalCount;
             console.log(json);
             console.log(event.target.response);
             document.getElementById("loader").style.display = "none";
             document.getElementById("submit").style.display = "block";
             
+            
+            document.getElementById("count").innerHTML = `You have ${json.data.totalCount} product/s`;
 
             if(json.code !== "SUCCESS"){
                 alert( 'Sorry we are not able to add a store at the moment' );
             }
-            else {
-                const r = confirm("Success! Do you want to upload another product? ");
-                if (r == true) {
-                    window.location.replace("uploadProduct.html?id="+ id);
-                } else {
-                    window.location.replace("confirm.html?id="+ id);
-                }
 
+            else {
+                if(count < 3) {
+                window.location.replace(`uploadProduct.html?id=${id}&&count=${count}`);
+                }
+                else {
+                    const r = confirm("Success! Do you want to upload another product? ");
+                    if (r == true) {
+                        window.location.replace("uploadProduct.html?id="+ id);
+                    } else {
+                        window.location.replace("confirm.html?id="+ id);
+                    }
+                }
             }
             
            
@@ -86,7 +104,10 @@
         } );
 
         // Set up our request
-        XHR.open( "POST", "https://qa-zypical-api.herokuapp.com/api/product/add" );
+        // Set up our request
+        const api = "https://qa-zypical-api.herokuapp.com/";
+        // const api = "http://localhost:3000/";
+        XHR.open( "POST", `${api}api/product/add` );
 
         // The data sent is what the user provided in the form        
         XHR.send( FD );
