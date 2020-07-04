@@ -3,15 +3,31 @@ body {
     font-weight: 400;
     font-size: 13px;
 }
+h1,h2,h3 {
+    font-family: 'Lato', sans-serif;
+
+}
 .center {
 	text-align: center;
+}
+a {
+	text-decoration: none;
+	color: #2BACB0;
+}
+.logo {
+	width: 200px;
+	height: auto;
+	/* margin: 20px; */
 }
 p {
     font-family: 'Lato', sans-serif;
     font-weight: 400;
 }
+.primary-color {
+	color: #236E6E;
+}
 .heading {
-    text-align: center;
+	text-align: center;
 }
 .loader {
 	height: 30px;
@@ -103,7 +119,7 @@ h2 {
 	height:35px;
 }
 .form-style-5 .number {
-	background: #1abc9c;
+	background: #236E6E;
 	color: #fff;
 	height: 30px;
 	width: 30px;
@@ -124,17 +140,18 @@ h2 {
 	padding: 19px 39px 18px 39px;
 	color: #FFF;
 	margin: 0 auto;
-	background: #1abc9c;
+	background: #2BACB0;
 	font-size: 18px;
 	text-align: center;
 	font-style: normal;
 	width: 100%;
-	border: 1px solid #16a085;
+	border: 1px solid #2BACB0;
 	border-width: 1px 1px 3px;
 	margin-bottom: 10px;
 }
 .form-style-5 input[type="submit"]:hover,
 .form-style-5 input[type="button"]:hover
 {
-	background: #109177;
+	background: #236E6E;
+	border: 1px solid #236E6E;
 }
