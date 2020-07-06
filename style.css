@@ -39,8 +39,8 @@ p {
     color: grey;
 }
 .image {
-    height: 250px;
-    width: auto;
+    height: auto;
+    width: 100%;
 }
 h2 {
     margin: 0;
