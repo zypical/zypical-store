@@ -2,8 +2,12 @@
 	display: none;
 }
 .container-progress {
-	width: 600px;
-	margin: 15px  auto; 
+	/* width: 100%;
+	margin: 15px  auto;  */
+	width: 100%;
+    position: relative;
+	left: -21px;
+	margin-top: 10px;
 }
 .progressbar {
 	counter-reset: step;
@@ -241,7 +245,10 @@ h2 {
 }
 .blue {
 	background-color: #2BACB0;
+}
 
+.white {
+	background-color: transparent;
 }
 .homeBtn a {
 	text-decoration: none;
