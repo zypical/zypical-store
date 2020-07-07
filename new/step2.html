@@ -13,11 +13,20 @@
 
 </head>
 <body class="container">
+    
     <div class="cluster">
         <img src="../img/zypical_black.png" class="logo">
         <br><br>
         <h2 class="heading">Join Virtual Bazaar</h2>   
-
+        
+        <div class="container-progress">
+            <ul class="progressbar">
+                <li class="active">Create Store</li>
+                <li class="active">Logo & Cover</li>
+                <li>Upload Products</li>
+                <li>Bazaar Layout</li>
+            </ul>
+        </div>
     </div>
 
     <div class="form-style-5">
@@ -30,15 +39,14 @@
                 <legend><span class="number">1</span> Store Icon (Square recommended)</legend>
 
                 <div> Select image: <input type="file" required name="image" ></div><br>
-
-
+               
                 
                 <div class="cluster">
-                
-                    <input type="submit" id="icon-submit" value="Upload Icon" />
+                    <input type="submit" id="icon-submit" class="upload-button" value="Upload Icon" />
                     <img src="../img/zypical-spinner.gif" class="loader" id="icon-loader" style="height: 100px;" alt="">
                     <img src="../img/check.png" style="height: 45px;" class="done"   id="icon-done"  alt=""/>
-
+    
+    
                 </div>
             </fieldset>
         </form>
@@ -57,15 +65,17 @@
                 
                 <div class="cluster">
                 
-                    <input type="submit" id="cover-submit" value="Upload Icon" />
+                    <input type="submit" id="cover-submit" value="Upload Cover" />
                     <img src="../img/zypical-spinner.gif" class="loader" id="cover-loader" style="height: 100px;" alt="">
                     <img src="../img/check.png" style="height: 45px;" class="done"   id="cover-done"  alt=""/>
 
                 </div>
         
+                <input type="button" disabled id="nextBtn"  value="Next"/>
             </fieldset>
             
          </form>
+                    
     </div>      
 </body>
 
@@ -95,7 +105,10 @@
 
             upload("cover",form2, api);
         } );
-
+        document.getElementById( "nextBtn").addEventListener( "click", function ( event ) {
+            event.preventDefault();
+            window.location.replace(`step3.html`);
+        } );
         
 
     function upload(el, form, api) {
@@ -115,13 +128,18 @@
             alert("success");
             document.getElementById(`${el}-loader`).style.display = "none";
             document.getElementById(`${el}-done`).style.display = "block";
+            document.getElementById("nextBtn").disabled = false;
+            
            
         } );
 
         // Define what happens in case of error
         XHR.addEventListener( "error", function( event ) {
         alert( 'Oops! Something went wrong.' );
-        console.log(event);
+            document.getElementById(`${el}-loader`).style.display = "none";
+            document.getElementById(`${el}-submit`).style.display = "block";
+            document.getElementById("nextBtn").disabled = false;
+            console.log(event);
         
         } );
 
