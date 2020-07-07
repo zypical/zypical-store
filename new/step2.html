@@ -107,7 +107,7 @@
         } );
         document.getElementById( "nextBtn").addEventListener( "click", function ( event ) {
             event.preventDefault();
-            window.location.replace(`step3.html`);
+            window.location.replace(`step3.html?id=${id}&&count=0`);
         } );
         
 
@@ -125,7 +125,6 @@
 
         // Define what happens on successful data submission
         XHR.addEventListener( "load", function(event) {
-            alert("success");
             document.getElementById(`${el}-loader`).style.display = "none";
             document.getElementById(`${el}-done`).style.display = "block";
             document.getElementById("nextBtn").disabled = false;
