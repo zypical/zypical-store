@@ -71,7 +71,7 @@
                     <input type="radio" name="transactionMethod" value="Shipment (Nationwide)">Shipment (Nationwide)
                 </div>
                 <div>    
-               
+                <br><br>
                   <input type="checkbox"  name="transactionMethod" value="COD">COD
                 </div>
                 <div> 
@@ -141,8 +141,8 @@
         } );
 
         // Set up our request
-        // const api = "https://qa-zypical-api.herokuapp.com/";
-        const api = "http://localhost:3000/";
+        const api = "https://qa-zypical-api.herokuapp.com/";
+        // const api = "http://localhost:3000/";
         XHR.open( "POST", `${api}api/store/tempcreate` );
         XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 

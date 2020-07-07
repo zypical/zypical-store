@@ -107,7 +107,7 @@
                     if (r == true) {
                         window.location.replace(`step3.html?id=${id}&&count=${count}`);
                     } else {
-                        window.location.replace("confirm.html?id="+ id);
+                        window.location.replace("step4.html?id="+ id);
                     }
                 }
             }
@@ -125,9 +125,8 @@
         } );
 
         // Set up our request
-        // Set up our request
-        // const api = "https://qa-zypical-api.herokuapp.com/";
-        const api = "http://localhost:3000/";
+        const api = "https://qa-zypical-api.herokuapp.com/";
+        // const api = "http://localhost:3000/";
         XHR.open( "POST", `${api}api/product/add` );
 
         // The data sent is what the user provided in the form        

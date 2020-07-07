@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Zypical provides you amazing online stores">
+    <meta name="keywords" content="Zypical, Online Stores, Bazaar">
+    <link rel="icon" href="../img/z-icon.png" type="image/x-icon"/>
+    
+    <title>Join Bazaar</title>
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../grid.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+</head>
+<body class="container">
+    
+    <div class="cluster">
+        <img src="../img/zypical_black.png" class="logo">
+        <br><br>
+        <h2 class="heading">Join Virtual Bazaar</h2>   
+        
+        <div class="container-progress">
+            <ul class="progressbar">
+                <li class="active">Create Store</li>
+                <li class="active">Logo & Cover</li>
+                <li class="active">Upload Products</li>
+                <li class="active">Bazaar Layout</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="form-style-5">
+        <form id="myForm">          
+            <div class="cluster">
+                <img src="../img/zypical-spinner.gif" class="loader" style="height: 100px;display: block" id="loader" alt="">
+            </div>
+
+           <h2 class="center">Choose your Bazaar Featured Products</h2> 
+            <br>
+            <p class="center">You can choose 3 or 6 products</p>
+            <br><br><br>
+            <div class="grid-container" id="grid-container">
+                
+            </div>
+            <div class="cluster">
+                <input type="submit"disabled value="Done" id="submit" />
+                <img src="../img/zypical-spinner.gif" class="loader" style="height: 100px;" id="loader" alt="">
+            </div>
+        </form>
+        </div>
+</body>
+<script>
+    
+    const api = "https://qa-zypical-api.herokuapp.com/store";
+    // const api = "http://localhost:3000/api/store";
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const id = urlParams.get('id');
+
+    let count = 0;
+    let gridType;
+    function updateCount (el) {
+        const check = document.getElementById(el);        
+        if(check.checked && count > 0) {
+            count --;
+        } else {
+            // Checkbox is not checked..
+            count ++
+        }
+
+        if(count === 3 ) {
+            document.getElementById("submit").disabled = false; 
+            const three = ["3-left", "3-right"];
+            gridType = three[Math.floor(Math.random() * three.length)];
+
+        }
+        else if(count === 6) {
+            document.getElementById("submit").disabled = false; 
+            gridType = "6-complete";
+        }
+        else {
+            document.getElementById("submit").disabled = true; 
+            gridType = "";
+        }
+    }
+    window.addEventListener( "load", function () {
+        
+        let xmlHttp = new XMLHttpRequest();
+
+        
+        xmlHttp.addEventListener( "load", function(event) {
+            
+            document.getElementById("loader").style.display = "none";
+            const json = JSON.parse(event.target.response );
+            const products = json.data.products;
+            console.log(json.data.products);
+
+            // Crxeate grid item
+
+            products.forEach(function(item) {
+                const container = document.getElementById("grid-container");
+                let div = document.createElement('div');
+                div.className = 'grid-item';
+
+
+                container.innerHTML += `
+                <div class="grid-item">
+                    <input type="checkbox"  id="check-${item._id}" name="featuredProducts" value="${item._id}" />
+                    
+                    <label for="check-${item._id}">
+                        <img class="img" onclick="updateCount('check-${item._id}')"  src="https://zypical-images.s3-ap-southeast-1.amazonaws.com/${item.image[0].img}" alt=""> 
+                
+                    </label>
+                </div>
+                `;
+
+            })
+        })
+        xmlHttp.open( "GET", `${api}/${id}`, false ); // false for synchronous request
+        xmlHttp.send( null );
+        const store = xmlHttp.response;
+
+        // Access the form element...
+        const form = document.getElementById( "myForm" );
+
+        // ...and take over its submit event.
+        form.addEventListener( "submit", function ( event ) {
+            event.preventDefault();
+
+            sendData();
+            
+        } );
+        
+        
+    function sendData() {
+        document.getElementById("loader").style.display = "block";
+        document.getElementById("submit").style.display = "none";
+
+        console.log("Submitting data...");
+        const XHR = new XMLHttpRequest();
+        // Bind the FormData object and the form element
+        const FD = new FormData( form );
+        let object = {featuredProducts : []};
+
+        FD.forEach((value, key) => {
+            console.log(key);
+            if(key === "featuredProducts") {
+                object.featuredProducts.push(value);
+            }
+            else {
+                object[key] = value;
+            }
+        });
+        // Define what happens on successful data submission
+        XHR.addEventListener( "load", function(event) {
+            document.getElementById("loader").style.display = "none";
+            document.getElementById("submit").style.display = "block";
+            window.location.replace("../confirm.html");
+        } );
+
+        // Define what happens in case of error
+        XHR.addEventListener( "error", function( event ) {
+            alert( 'Oops! Something went wrong.' );
+            
+            document.getElementById("loader").style.display = "none";
+            document.getElementById("submit").style.display = "block";
+        } );
+
+        // Set up our request
+        // Set up our request
+        // const api = "https://qa-zypical-api.herokuapp.com/";
+        const api = "http://localhost:3000/";
+        XHR.open( "POST", `${api}api/bazaar/join` );
+        XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+        // The data sent is what the user provided in the form  
+        object.gridType = gridType;
+        object.id = id;   
+        let json = JSON.stringify(object);   
+        XHR.send( json );
+
+    }
+
+
+    } );
+    
+</script>
+</html>
