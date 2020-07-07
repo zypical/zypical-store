@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Zypical provides you amazing online stores">
+    <meta name="keywords" content="Zypical, Online Stores, Bazaar">
+    <link rel="icon" href="img/z-icon.png" type="image/x-icon"/>
+    
+    <title>Join Bazaar</title>
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+</head>
+<body class="container">
+    <div class="cluster">
+        <img src="../img/zypical_black.png" class="logo">
+        <br><br>
+        <h2 class="heading">Join Virtual Bazaar</h2>   
+
+    </div>
+
+    <div class="form-style-5">
+        <form id="myForm">
+        <fieldset>
+            <input hidden name="createdBy" value="5eff97b9c99ede34e404d08f">
+            <input hidden name="managedBy" value="5eff97b9c99ede34e404d08f">
+
+            <legend><span class="number">1</span> Store Info</legend>
+
+            <input type="text" name="name" required placeholder="Store Name *">
+            <input type="text" name="handle" required placeholder="Store username *">
+            <input type="text" name="handle" required placeholder="Instagram username *">
+
+            <input type="email" name="email" required placeholder="Your/Business Email *">
+            <input type="text" name="contactNumber"  placeholder="Contact Number (if any)">
+
+            <textarea name="description" required placeholder="Describe your store" max="300"></textarea>
+            
+            
+            <fieldset>
+                <legend>Transaction Method</legend>
+                <!-- <div>
+                    <input type="checkbox" name="transactionMethod" value="Metro Manila">Metro Manila
+                  </div>
+                  <div>
+                    <input type="checkbox" name="transactionMethod" value="Nationwide">Nationwide
+                  </div>
+                <div> -->
+                  <input type="checkbox" name="transactionMethod" value="Shipment Nationwide">Shipment
+                </div>
+                <div>    
+               
+                  <input type="checkbox"  name="transactionMethod" value="Shipment within Metro Manila">COD
+                </div>
+                <div> 
+                  <input type="checkbox"  name="transactionMethod" value="Meet Up">Meet Up
+                </div>
+              </fieldset>
+
+            <label for="category">Category:</label>
+            <select id="category" name="category" required>
+                <optgroup label="Categories">
+                    <option value="Fashion">Fashion</option>
+                    <option value="Fashion Accessories">Fashion Accessories</option>
+                    <option value="Food">Food</option>
+                    <option value="Household">Household</option>
+                    <option value="Green Products">Green Products</option>
+                    <option value="Games">Games</option>
+                    <option value="Baby">Baby</option>
+                    <option value="Shoes">Shoes</option>
+                    <option value="Geadgets">Geadgets</option>
+                    <option value="Geadgets Accessories">Geadgets Accessories</option>
+                    <option value="Entertainment">Entertainment</option>
+                </optgroup>
+            </select>      
+        </fieldset>
+        <fieldset>
+            
+        <input type="submit" value="CREATE STORE" />
+        </form>
+        </div>
+</body>
+
+<script>
+    window.addEventListener( "load", function () {
+    function sendData() {
+        const XHR = new XMLHttpRequest();
+
+        // Bind the FormData object and the form element
+        const FD = new FormData( form );
+        
+        let object = {transactionMethod: []};
+        FD.forEach((value, key) => {
+            if(key === "transactionMethod"){
+                object["transactionMethod"].push(value)
+            }
+            else {
+                object[key] = value;
+            }
+            console.log(value);
+            
+            });
+        let json = JSON.stringify(object);
+        console.log(json);
+
+        // Define what happens on successful data submission
+        XHR.addEventListener( "load", function(event) {
+            const json = JSON.parse(event.target.response );
+            console.log(json);
+
+            if(json.code !== "SUCCESS"){
+                alert( 'Sorry we are not able to add a store at the moment' );
+            }
+            else {
+                alert("Success! Your store ID is "+json.data)
+                window.location.replace(`uploadProduct.html?id=${json.data}&&count=0`);
+
+            }
+            
+        } );
+
+        // Define what happens in case of error
+        XHR.addEventListener( "error", function( event ) {
+        alert( 'Sorry we are not able to add a store at the moment' );
+        console.log(event);
+        
+        } );
+
+        // Set up our request
+        // const api = "https://qa-zypical-api.herokuapp.com/";
+        const api = "http://localhost:3000/";
+        XHR.open( "POST", `${api}api/store/tempcreate` );
+        XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+        // The data sent is what the user provided in the form
+        
+        XHR.send( json );
+
+    }
+    
+    // Access the form element...
+    const form = document.getElementById( "myForm" );
+
+    // ...and take over its submit event.
+        form.addEventListener( "submit", function ( event ) {
+            event.preventDefault();
+
+            sendData();
+        } );
+    } );
+</script>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Zypical provides you amazing online stores">
+    <meta name="keywords" content="Zypical, Online Stores, Bazaar">
+    <link rel="icon" href="../img/z-icon.png" type="image/x-icon"/>
+    
+    <title>Join Bazaar</title>
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+</head>
+<body class="container">
+    <div class="cluster">
+        <img src="../img/zypical_black.png" class="logo">
+        <br><br>
+        <h2 class="heading">Join Virtual Bazaar</h2>   
+
+    </div>
+
+    <div class="form-style-5">
+        <form id="myForm">
+            <fieldset>
+                <input hidden name="createdBy" value="5f042b7066e52800173b072a">
+                <input hidden name="managedBy" value="5f042b7066e52800173b072a">    
+
+                
+                <legend><span class="number">1</span> Store Icon (Square recommended)</legend>
+
+                <div> Select image: <input type="file" required name="image" ></div><br>
+
+
+                
+                <div class="cluster">
+                
+                    <input type="submit" id="icon-submit" value="Upload Icon" />
+                    <img src="../img/zypical-spinner.gif" class="loader" id="icon-loader" style="height: 100px;" alt="">
+                    <img src="../img/check.png" style="height: 45px;" class="done"   id="icon-done"  alt=""/>
+
+                </div>
+            </fieldset>
+        </form>
+      <br><br>  
+        <form id="myForm2">
+            <fieldset>
+                <input hidden name="createdBy" value="5eff97b9c99ede34e404d08f">
+                <input hidden name="managedBy" value="5eff97b9c99ede34e404d08f">
+
+                
+                <legend><span class="number">2</span> Store Cover Photo (optional) </legend>
+
+                <div> Select image: <input type="file" required name="image" ></div><br>
+
+
+                
+                <div class="cluster">
+                
+                    <input type="submit" id="cover-submit" value="Upload Icon" />
+                    <img src="../img/zypical-spinner.gif" class="loader" id="cover-loader" style="height: 100px;" alt="">
+                    <img src="../img/check.png" style="height: 45px;" class="done"   id="cover-done"  alt=""/>
+
+                </div>
+        
+            </fieldset>
+            
+         </form>
+    </div>      
+</body>
+
+<script>
+    window.addEventListener( "load", function () {
+        // user=5f042b7066e52800173b072a&&store=5eed10673f9e9f2720a84ec1
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const id = urlParams.get('id');
+
+        // const api = "https://qa-zypical-api.herokuapp.com/";
+        const api = "http://localhost:3000/api/store/image";
+
+        
+        // Icon 
+        const form = document.getElementById( "myForm" );
+        form.addEventListener( "submit", function ( event ) {
+            event.preventDefault();
+
+            upload("icon",form, api);
+        } );
+
+        // Cover 
+        const form2 = document.getElementById( "myForm2" );
+        form2.addEventListener( "submit", function ( event ) {
+            event.preventDefault();
+
+            upload("cover",form2, api);
+        } );
+
+        
+
+    function upload(el, form, api) {
+        console.log("Submitting data to: ",api);
+        document.getElementById(`${el}-loader`).style.display = "block";
+        document.getElementById(`${el}-submit`).style.display = "none";
+        const XHR = new XMLHttpRequest();
+
+        // Bind the FormData object and the form element
+        const FD = new FormData( form );
+        FD.append("storeID",id);
+        FD.append("type",el);       
+
+
+        // Define what happens on successful data submission
+        XHR.addEventListener( "load", function(event) {
+            alert("success");
+            document.getElementById(`${el}-loader`).style.display = "none";
+            document.getElementById(`${el}-done`).style.display = "block";
+           
+        } );
+
+        // Define what happens in case of error
+        XHR.addEventListener( "error", function( event ) {
+        alert( 'Oops! Something went wrong.' );
+        console.log(event);
+        
+        } );
+
+        // Set up our request
+        XHR.open( "POST", api );
+
+        // The data sent is what the user provided in the form        
+        XHR.send( FD );
+
+    }
+    
+    } );
+    
+</script>
+
+</html>
