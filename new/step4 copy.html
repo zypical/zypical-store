@@ -55,7 +55,7 @@
 </body>
 <script>
     
-    const api = "https://qa-zypical-api.herokuapp.com/api/store";
+    const api = "https://qa-zypical-api.herokuapp.com/store";
     // const api = "http://localhost:3000/api/store";
 
     const queryString = window.location.search;
@@ -88,7 +88,7 @@
             gridType = "";
         }
     }
-    window.addEventListener( "load", function () {
+    $(function() {
         
         let xmlHttp = new XMLHttpRequest();
 
@@ -173,8 +173,8 @@
 
         // Set up our request
         // Set up our request
-        const api = "https://qa-zypical-api.herokuapp.com/";
-        // const api = "http://localhost:3000/";
+        // const api = "https://qa-zypical-api.herokuapp.com/";
+        const api = "http://localhost:3000/";
         XHR.open( "POST", `${api}api/bazaar/join` );
         XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
