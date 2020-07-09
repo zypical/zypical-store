@@ -46,7 +46,7 @@
             <hr><br>
 
 
-            <div> Select images: <input type="file" required name="images" multiple></div><br>
+            <div> Select images: <input type="file" id="file" required name="images" multiple></div><br>
             <input hidden id="store" name="store" >
             <input type="text" name="name" required placeholder="Name *">
             <input type="number" name="price" required placeholder="Price *">
@@ -56,9 +56,6 @@
   
         </fieldset>
         <fieldset>
-        <!-- <legend><span class="number">2</span> Additional Info</legend>
-        <textarea name="field3" placeholder="About Your School"></textarea>
-        </fieldset> -->
         <div class="cluster">
             <input type="submit" id="submit" value="Upload" />
             <img src="../img/zypical-spinner.gif" class="loader" style="height: 100px;" id="loader" alt="">
@@ -138,14 +135,29 @@
     
     // Access the form element...
     const form = document.getElementById( "myForm" );
-
     // ...and take over its submit event.
         form.addEventListener( "submit", function ( event ) {
             event.preventDefault();
-
-            sendData();
+            const correct = checkSize(document.getElementById("file").files);
+            if(correct) {                
+                sendData();
+            }
         } );
     } );
+    
+    function checkSize (files) {
+        Object.keys(files).forEach(function(el,index) {
+            let file = files[el];
+            if (file.size > 500000) // 2 mb for bytes.
+            {
+                alert(`File too large for image ${file.name}. Please upload less than 500KB`)
+                console.log("Image size: ", file.size);
+                return false;
+            }
+            return true;
+        });
+            
+        }
     
 </script>
 </html>
