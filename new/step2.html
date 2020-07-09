@@ -41,7 +41,7 @@
                 
                 <legend><span class="number">1</span> Store Icon (Square recommended)</legend>
 
-                <div> Select image: <input type="file" required name="image" ></div><br>
+                <div> Select image (max 500KB): <input type="file" id="icon-file" required name="image" ></div><br>
                
                 
                 <div class="cluster">
@@ -62,7 +62,7 @@
                 
                 <legend><span class="number">2</span> Store Cover Photo (optional) </legend>
 
-                <div> Select image: <input type="file" required name="image" ></div><br>
+                <div> Select image (max 500KB): <input type="file" id="cover-file" required name="image" ></div><br>
 
 
                 
@@ -98,15 +98,26 @@
         form.addEventListener( "submit", function ( event ) {
             event.preventDefault();
 
-            upload("icon",form, api);
+            const correct = checkSize(document.getElementById("icon-file").files[0]);
+            if(correct) {                
+                upload("icon",form, api);
+            }
+            else {
+                alert("You icon file is too large. Please upload less than 500KB")
+            }
         } );
 
         // Cover 
         const form2 = document.getElementById( "myForm2" );
         form2.addEventListener( "submit", function ( event ) {
             event.preventDefault();
-
-            upload("cover",form2, api);
+            const correct = checkSize(document.getElementById("cover-file").files[0]);
+            if(correct) {                
+                upload("cover",form2, api);
+            }
+            else {
+                alert("You cover file is too large. Please upload less than 500KB")
+            }
         } );
         document.getElementById( "nextBtn").addEventListener( "click", function ( event ) {
             event.preventDefault();
@@ -114,44 +125,54 @@
         } );
         
 
-    function upload(el, form, api) {
-        console.log("Submitting data to: ",api);
-        document.getElementById(`${el}-loader`).style.display = "block";
-        document.getElementById(`${el}-submit`).style.display = "none";
-        const XHR = new XMLHttpRequest();
+        function upload(el, form, api) {
+            console.log("Submitting data to: ",api);
+            document.getElementById(`${el}-loader`).style.display = "block";
+            document.getElementById(`${el}-submit`).style.display = "none";
+            const XHR = new XMLHttpRequest();
 
-        // Bind the FormData object and the form element
-        const FD = new FormData( form );
-        FD.append("storeID",id);
-        FD.append("type",el);       
+            // Bind the FormData object and the form element
+            const FD = new FormData( form );
+            FD.append("storeID",id);
+            FD.append("type",el);       
 
 
-        // Define what happens on successful data submission
-        XHR.addEventListener( "load", function(event) {
-            document.getElementById(`${el}-loader`).style.display = "none";
-            document.getElementById(`${el}-done`).style.display = "block";
-            document.getElementById("nextBtn").disabled = false;
+            // Define what happens on successful data submission
+            XHR.addEventListener( "load", function(event) {
+                document.getElementById(`${el}-loader`).style.display = "none";
+                document.getElementById(`${el}-done`).style.display = "block";
+                document.getElementById("nextBtn").disabled = false;
+                
             
-           
-        } );
+            } );
 
-        // Define what happens in case of error
-        XHR.addEventListener( "error", function( event ) {
-        alert( 'Oops! Something went wrong.' );
-            document.getElementById(`${el}-loader`).style.display = "none";
-            document.getElementById(`${el}-submit`).style.display = "block";
-            document.getElementById("nextBtn").disabled = false;
-            console.log(event);
-        
-        } );
+            // Define what happens in case of error
+            XHR.addEventListener( "error", function( event ) {
+            alert( 'Oops! Something went wrong.' );
+                document.getElementById(`${el}-loader`).style.display = "none";
+                document.getElementById(`${el}-submit`).style.display = "block";
+                document.getElementById("nextBtn").disabled = false;
+                console.log(event);
+            
+            } );
 
-        // Set up our request
-        XHR.open( "POST", api );
+            // Set up our request
+            XHR.open( "POST", api );
 
-        // The data sent is what the user provided in the form        
-        XHR.send( FD );
+            // The data sent is what the user provided in the form        
+            XHR.send( FD );
 
-    }
+        }
+
+        function checkSize (file) {
+            console.log("Image size: ", file.size);
+            
+            if (file.size > 500000) // 2 mb for bytes.
+            {
+                return false;
+            }
+            return true;
+        }
     
     } );
     

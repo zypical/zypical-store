@@ -32,7 +32,9 @@
 
     
     <div class="form-style white">
-
+        <div class="right">
+            <a class="next">NEXT</a>
+        </div> 
         <form id="myForm">
             <input hidden name="userID" value="5f042b7066e52800173b072a">
 
@@ -41,7 +43,7 @@
             Description <textarea type="textbox" required name="description" id="description" ></textarea>
 
             <div class="cluster">
-                <input type="submit" id="submit" class="upload-button" value="Upload" />
+                <input type="submit" id="submit" class="upload-button" value="Update" />
                 <img src="../img/zypical-spinner.gif" class="loader" id="loader" style="height: 100px;" alt="">
                 <img src="../img/check.png" style="height: 45px;" class="done"   id="done"  alt=""/>
 
@@ -58,8 +60,8 @@
         const urlParams = new URLSearchParams(queryString);
         const id = urlParams.get('id');
 
-        // const api = "https://qa-zypical-api.herokuapp.com/api/store/image";
-        const api = "http://localhost:3000/api/store/";
+        const api = "https://qa-zypical-api.herokuapp.com/api/store/";
+        // const api = "http://localhost:3000/api/store/";
 
         
         //  

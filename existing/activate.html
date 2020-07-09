@@ -20,13 +20,6 @@
             <br><br>
             <h2 class="heading">Join Virtual Bazaar</h2>   
             
-            <div class="container-progress">
-                <ul class="progressbar">
-                    <li class="active">Activate Store</li>
-                    <li >Profile Info</li>
-                    <li>Upload Products</li>
-                </ul>
-            </div>
         </div>
     </div>
 
@@ -36,7 +29,7 @@
         <form id="myForm">
             <input hidden name="userID" value="5f042b7066e52800173b072a">
 
-            Enter handle: <input type="text" required name="handle">
+            Enter store username: <input type="text" required name="handle">
             Enter password: <input type="text" required name="password">
 
             <div class="cluster">
@@ -51,16 +44,10 @@
 
 <script>
     window.addEventListener( "load", function () {
-        // user=5f042b7066e52800173b072a&&store=5eed10673f9e9f2720a84ec1
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
-        const id = urlParams.get('id');
+        // const id = urlParams.get('id');
 
-        const api = "https://qa-zypical-api.herokuapp.com/api/store/image";
-        // const api = "http://localhost:3000/api/store/image";
-
-        
-        //  
         const form = document.getElementById( "myForm" );
         form.addEventListener( "submit", function ( event ) {
             event.preventDefault();
@@ -102,7 +89,7 @@
         } );
 
         // Set up our request
-        const api = "http://localhost:3000/api/store/activate"
+        const api = "http://localhost:3000/api/store/activate";
         XHR.open( "POST", api );
         XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 

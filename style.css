@@ -256,3 +256,18 @@ h2 {
     font-weight: 700;
     text-shadow: 2px 2px rgba(0,0,0,0.2);
 }
+
+.right {
+	text-align: right;
+    font-size: 18px;
+    font-weight: 900;
+    margin-bottom: 35px;
+}
+
+.next {
+	text-decoration: none;
+    color: #2BACB0;
+    padding: 7px 19px;
+    border: 1px solid;
+    border-radius: 5px;
+}
