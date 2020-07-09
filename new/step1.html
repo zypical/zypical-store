@@ -71,7 +71,7 @@
             <fieldset>
                 <legend>Transaction Method</legend>
                   <div> 
-                    <input type="radio" name="transactionMethod" value="Shipment (Metro Manila only)">Shipment (Metro Manila only)
+                    <input type="radio" name="transactionMethod" value="Shipment (Metro Manila only)">Shipment (Metro Manila)
                     <input type="radio" name="transactionMethod" value="Shipment (Nationwide)">Shipment (Nationwide)
                 </div>
                 <div>    
@@ -80,6 +80,9 @@
                 </div>
                 <div> 
                   <input type="checkbox"  name="transactionMethod" value="Meet Up">Meet Up
+                </div>
+                <div> 
+                  <input type="checkbox"  name="transactionMethod" value="Meet Up">Pick Up
                 </div>
               </fieldset>
   
@@ -99,10 +102,13 @@
         // Bind the FormData object and the form element
         const FD = new FormData( form );
         
-        let object = {transactionMethod: [],socialLinks : {instagram: "", facebook: ""}};
+        let object = {transactionMethod: [],socialLinks : {instagram: ""}};
         FD.forEach((value, key) => {
             if(key === "transactionMethod"){
                 object["transactionMethod"].push(value)
+            }
+            else if(value === "") {
+                
             }
             else if(key === "ig" ) {
                 object.socialLinks.instagram = value;

@@ -36,8 +36,9 @@
         <form id="myForm">
             <input hidden name="userID" value="5f042b7066e52800173b072a">
 
-            Enter handle: <input type="text" required name="handle">
-            Enter password: <input type="text" required name="password">
+            Name <input type="text" required name="name" id="name">
+            Username <input type="text" required name="handle" id="handle">
+            Description <textarea type="textbox" required name="description" id="description" ></textarea>
 
             <div class="cluster">
                 <input type="submit" id="submit" class="upload-button" value="Upload" />
@@ -51,13 +52,14 @@
 
 <script>
     window.addEventListener( "load", function () {
+        
         // user=5f042b7066e52800173b072a&&store=5eed10673f9e9f2720a84ec1
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const id = urlParams.get('id');
 
-        const api = "https://qa-zypical-api.herokuapp.com/api/store/image";
-        // const api = "http://localhost:3000/api/store/image";
+        // const api = "https://qa-zypical-api.herokuapp.com/api/store/image";
+        const api = "http://localhost:3000/api/store/";
 
         
         //  
@@ -67,6 +69,24 @@
 
             activate();
         } );
+
+
+        let xmlHttp = new XMLHttpRequest();
+        xmlHttp.addEventListener( "load", function(event) {
+            
+            document.getElementById("loader").style.display = "none";
+            const json = JSON.parse(event.target.response ).data;
+            console.log(json);
+            
+                document.getElementById("name").value = json.name;
+                document.getElementById("handle").value = json.handle;
+                document.getElementById("description").value = json.description;
+        })
+        xmlHttp.open( "GET", `${api}/${id}`, false ); // false for synchronous request
+        xmlHttp.send( null );
+
+
+
 
     function activate() {
         console.log("Submitting data ");
