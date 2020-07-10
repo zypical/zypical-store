@@ -82,6 +82,7 @@ a {
 .logo {
 	width: 200px;
 	height: auto;
+	cursor: pointer;
 	/* margin: 20px; */
 }
 p {

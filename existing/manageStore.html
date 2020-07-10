@@ -10,13 +10,18 @@
     <link rel="stylesheet" type="text/css" href="../style.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <script src="../variable.js"></script>
+    <script>
+        const goHome = () => {
+            window.location.replace("../index.html");
+        }
+    </script>
 </head>
 <body class="container">
     
 
     <div class="form-style white">
         <div class="cluster">
-            <img src="../img/zypical_black.png" class="logo">
+            <img onclick="goHome()" src="../img/zypical_black.png" class="logo">
             <br><br>
             <h2 class="heading">Join Virtual Bazaar</h2>   
             
@@ -29,7 +34,7 @@
 
     
     <div class="form-style white">
-        <form id="myForm">
+        <form id="myForm" stly="display: none">
             
             <fieldset>
                 <legend><span class="number">1</span>Store Profile</legend>
@@ -96,7 +101,6 @@
         console.log("Submitting data ");
             document.getElementById(`loader`).style.display = "block";
             document.getElementById(`submit`).style.display = "none";
-            document.getElementById("next").className = "next disabled";
             const XHR = new XMLHttpRequest();
 
             // Bind the FormData object and the form element
@@ -125,17 +129,15 @@
             XHR.addEventListener( "load", function(event) {
                 document.getElementById(`loader`).style.display = "none";
                 document.getElementById(`done`).style.display = "block";
-                document.getElementById("next").className = "next";
                 
             
             } );
 
             // Define what happens in case of error
             XHR.addEventListener( "error", function( event ) {
-            alert( 'Oops! Something went wrong.' );
+                alert( 'Oops! Something went wrong.' );
                 document.getElementById(`loader`).style.display = "none";
                 document.getElementById(`submit`).style.display = "block";
-                document.getElementById("next").className = "next";
                 console.log(event);
             
             } );
