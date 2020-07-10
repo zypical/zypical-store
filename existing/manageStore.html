@@ -20,61 +20,65 @@
             <br><br>
             <h2 class="heading">Join Virtual Bazaar</h2>   
             
-            <div class="container-progress">
-                <ul class="progressbar">
-                    <li class="active">Activate Store</li>
-                    <li >Profile Info</li>
-                    <li>Upload Products</li>
-                </ul>
+            <div class="tabs">
+                    <div class="tab"><a class="active"  href="javascript:goToStore();">Your Store</a></div>
+                    <div class="tab"><a  href="javascript:goToProduct();">Your Products</a></div>
             </div>
         </div>
     </div>
 
     
     <div class="form-style white">
-        <div class="right">
-            <a class="next">NEXT</a>
-        </div> 
         <form id="myForm">
-            <input hidden name="userID" value="5f042b7066e52800173b072a">
-
-            Name <input type="text" required name="name" id="name">
-            Username <input type="text" required name="handle" id="handle">
-            Instagram username <input type="text" required name="instagram" id="handle">
-            Facebook link <input type="text" required name="facebook" id="handle">
             
-            Description <textarea type="textbox" required name="description" id="description" ></textarea>
+            <fieldset>
+                <legend><span class="number">1</span>Store Profile</legend>
+                <br>
+                Name <input type="text" required name="name" id="name">
+                Username <input type="text" required name="handle" id="handle">
+                Instagram username <input type="text" required name="instagram" id="ig">
+                Facebook link <input type="text"  name="facebook" id="fb">
+                
+                Description <textarea type="textbox" required name="description" id="description" ></textarea>
 
-            <div class="cluster">
-                <input type="submit" id="submit" class="upload-button" value="Update" />
-                <img src="../img/zypical-spinner.gif" class="loader" id="loader" style="height: 100px;" alt="">
-                <img src="../img/check.png" style="height: 45px;" class="done"   id="done"  alt=""/>
+                <div class="cluster">
+                    <input type="submit" id="submit" class="upload-button" value="Update" />
+                    <img src="../img/zypical-spinner.gif" class="loader" id="loader" style="height: 100px;" alt="">
+                    <img src="../img/check.png" style="height: 45px;display: none" class="done"   id="done"  alt=""/>
 
 
-            </div>
+                </div>
+            </fieldset>
         </form> 
     </div>
 
 <script>
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const id = urlParams.get('id');
+    
     window.addEventListener( "load", function () {
-        
-        // user=5f042b7066e52800173b072a&&store=5eed10673f9e9f2720a84ec1
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const id = urlParams.get('id');
+        getStore();
 
         const form = document.getElementById( "myForm" );
         form.addEventListener( "submit", function ( event ) {
             event.preventDefault();
-
-            update();
+            updateStore();
         } );
 
-
+    } );
+        
+    const goToStore = () => {
+        window.location.replace(`manageStore.html?id=${id}`);
+    }
+    const goToProduct = () => {
+        window.location.replace(`upload.html?id=${id}`);
+    }
+    const getStore = () => {
         let xmlHttp = new XMLHttpRequest();
         xmlHttp.addEventListener( "load", function(event) {
             
-            document.getElementById("loader").style.display = "none";
             const json = JSON.parse(event.target.response ).data;
             console.log(json);
             
@@ -82,18 +86,17 @@
             document.getElementById("handle").value = json.handle;
             document.getElementById("description").value = json.description;
             document.getElementById("ig").value = json.socialLinks.instagram;
-            document.getElementById("fb").value = json.socialLinks.facebook || "";
+            document.getElementById("fb").value = json.socialLinks.facebook ? json.socialLinks.facebook : "";
         })
         xmlHttp.open( "GET", `${api}/store/${id}`, false ); // false for synchronous request
         xmlHttp.send( null );
+    }
 
-
-
-
-        function update() {
-            console.log("Submitting data ");
-            // document.getElementById(`loader`).style.display = "block";
-            // document.getElementById(`submit`).style.display = "none";
+    const updateStore = () => {
+        console.log("Submitting data ");
+            document.getElementById(`loader`).style.display = "block";
+            document.getElementById(`submit`).style.display = "none";
+            document.getElementById("next").className = "next disabled";
             const XHR = new XMLHttpRequest();
 
             // Bind the FormData object and the form element
@@ -122,6 +125,7 @@
             XHR.addEventListener( "load", function(event) {
                 document.getElementById(`loader`).style.display = "none";
                 document.getElementById(`done`).style.display = "block";
+                document.getElementById("next").className = "next";
                 
             
             } );
@@ -131,12 +135,13 @@
             alert( 'Oops! Something went wrong.' );
                 document.getElementById(`loader`).style.display = "none";
                 document.getElementById(`submit`).style.display = "block";
+                document.getElementById("next").className = "next";
                 console.log(event);
             
             } );
 
             // Set up our request
-            XHR.open( "POST", `${api}/store/activate` );
+            XHR.open( "PATCH", `${api}/store/${id}` );
             XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
 
@@ -145,11 +150,11 @@
              
             console.log(JSON.stringify(object));
             
-            XHR.send( json );
-
-        }
-        
-    } );
+            XHR.send(JSON.stringify(object));
+    }
+    
+    
+    
     
 </script>
 

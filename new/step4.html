@@ -104,10 +104,6 @@
 
             products.forEach(function(item) {
                 const container = document.getElementById("grid-container");
-                let div = document.createElement('div');
-                div.className = 'grid-item';
-
-
                 container.innerHTML += `
                 <div class="grid-item">
                     <input type="checkbox"  id="check-${item._id}" name="featuredProducts" value="${item._id}" />

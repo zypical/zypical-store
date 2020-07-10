@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Zypical provides you amazing online stores">
+    <meta name="keywords" content="Zypical, Online Stores, Bazaar">
+    <link rel="icon" href="../img/z-icon.png" type="image/x-icon"/>
+    
+    <title>Join Bazaar</title>
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../grid.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" />
+    <script src="../variable.js"></script>
+</head>
+<body class="container">
+    
+    <div class="form-style white">
+        <div class="cluster">
+            <img src="../img/zypical_black.png" class="logo">
+            <br><br>
+            <h2 class="heading">Join Virtual Bazaar</h2>   
+            
+            <div class="tabs">
+                <div class="tab"><a  href="javascript:goToStore();">Your Store</a></div>
+                <div class="tab"><a class="active" href="javascript:goToProduct();">Your Products</a></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-style"> 
+            <legend><span class="number">1</span>You current Products</legend>
+            <div class="cluster">
+                <img src="../img/zypical-spinner.gif" class="loader" style="height: 100px;display: block" id="loader" alt="">
+            </div>
+
+            <div class="grid-container" id="grid-container">
+                
+            </div>
+    </div>
+
+    <div class="form-style">
+        <form id="myForm">          
+            <fieldset>
+                <input hidden name="createdBy" value="5eff97b9c99ede34e404d08f">
+                <input hidden name="managedBy" value="5eff97b9c99ede34e404d08f">
+
+                <legend><span class="number">2</span>Upload a Product</legend>
+                <hr><br>
+
+
+                <div> Select images: <input type="file" id="file" required name="images" multiple></div><br>
+                
+                <input type="text" name="name" required placeholder="Name *">
+                <input type="number" name="price" required placeholder="Price *">
+                <textarea name="description" maxlength="300" required placeholder="Describe your product * (300 characters)" max="300"></textarea>
+                
+                
+    
+            </fieldset>
+            <div class="cluster">
+                <input type="submit" id="submit" value="Upload" />
+                <img src="../img/zypical-spinner.gif" class="loader" style="height: 100px;" id="upload-loader" alt="">
+            </div>
+            
+        </form>
+    </div>
+</body>
+</html>
+
+
+<script>    
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const id = urlParams.get('id');
+    const xmlHttp = new XMLHttpRequest();
+    
+
+    // Elements
+    const form = document.getElementById( "myForm" );
+    const container = document.getElementById("grid-container");
+
+    // Do these on page load
+    window.addEventListener( "load", () => {
+        getProducts();        
+    })
+
+    /** Listeners */
+    form.addEventListener( "submit", function ( event ) {
+        event.preventDefault();
+        const correct = checkSize(document.getElementById("file").files);
+            console.log("Correct file size: ",correct);
+        if(correct) {                
+            
+            uploadProduct(id);
+        }
+    } );
+    /** Functions */
+    const getProducts = () => {
+        // This function is triggered when GET Request is successful
+        const getXMLHttp = new XMLHttpRequest();
+        getXMLHttp.addEventListener( "load", function(event) {
+            console.log("getting products...");
+            
+            document.getElementById("loader").style.display = "none";
+            const json = JSON.parse(event.target.response );
+            const products = json.data.products;
+            console.log(json.data);
+
+            // Create grid item
+            products.forEach(function(item) {
+                container.innerHTML += `
+                <div class="grid-item">
+                    <img class="img"   src="https://zypical-images.s3-ap-southeast-1.amazonaws.com/${item.image[0].img}" alt=""> 
+                </div>
+                `;
+
+            })
+        });
+
+        // If Request is not successful
+        getXMLHttp.addEventListener( "error", function( event ) {
+            alert( 'Oops! Something went wrong.' );
+            console.log(JSON.parse(event.target.response.data));
+            document.getElementById("loader").style.display = "none";
+        } );
+
+        console.log(`Requesting from ${api}/store/${id}`);
+        getXMLHttp.open( "GET", `${api}/store/${id}`, false ); // false for synchronous request
+        getXMLHttp.send( null );
+    }
+
+    const uploadProduct = (id) => {
+        document.getElementById("upload-loader").style.display = "block";
+        document.getElementById("submit").style.display = "none";
+        
+
+        console.log("Uploading...");
+        const FD = new FormData( form );
+        FD.append("store", id);
+
+        // Function if request is successful
+        xmlHttp.addEventListener( "load", function(event) {
+            document.getElementById("upload-loader").style.display = "none";
+            document.getElementById("submit").style.display = "block";
+            const json = JSON.parse(event.target.response );
+            const item = json.data;
+            console.log(json);
+            
+            container.innerHTML += `
+                <div class="grid-item">
+                    <img class="img"   src="https://zypical-images.s3-ap-southeast-1.amazonaws.com/${item.image[0].img}" alt=""> 
+                </div>
+                `;
+            form.reset();
+        });
+        
+        xmlHttp.open( "POST", `${api}/product/add` );
+        xmlHttp.send( FD );
+
+    }
+
+    const checkSize = (files) => {
+        
+        Object.keys(files).forEach(function(el,index) {
+            let file = files[el];
+            console.log("File checked: ",file.name);
+            if (file.size > 500000) // 2 mb for bytes.
+            {
+                alert(`File too large for image ${file.name}. Please upload less than 500KB`)
+                console.log("Image size: ", file.size);
+                return false;
+            }
+        });
+            
+        return true;
+    }
+
+    const goToStore = () => {
+        window.location.replace(`manageStore.html?id=${id}`);
+    }
+    const goToProduct = () => {
+        window.location.replace(`upload.html?id=${id}`);
+    }
+
+</script>
