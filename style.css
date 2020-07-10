@@ -148,6 +148,7 @@ h2 {
 .form-style input[type="search"],
 .form-style input[type="time"],
 .form-style input[type="url"],
+.form-style input[type="password"],
 .form-style textarea,
 .form-style select {
 	background: rgba(255,255,255,.1);
