@@ -30,10 +30,10 @@
             <input hidden name="userID" value="5f042b7066e52800173b072a">
 
             Enter store username: <input type="text" required name="handle">
-            Enter password: <input type="text" required name="password">
+            Enter temporary password: <input type="text" required name="password">
 
             <div class="cluster">
-                <input type="submit" id="submit" class="upload-button" value="Upload" />
+                <input type="submit" id="submit" class="upload-button" value="Done" />
                 <img src="../img/zypical-spinner.gif" class="loader" id="loader" style="height: 100px;" alt="">
                 <img src="../img/check.png" style="height: 45px;" class="done"   id="done"  alt=""/>
 
@@ -58,7 +58,7 @@
     function activate() {
         console.log("Submitting data ");
         // document.getElementById(`loader`).style.display = "block";
-        // document.getElementById(`submit`).style.display = "none";
+        // document.getElementById(`submit`).style.display = "done";
         const XHR = new XMLHttpRequest();
 
         // Bind the FormData object and the form element

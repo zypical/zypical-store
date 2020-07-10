@@ -9,7 +9,7 @@
     <title>Join Bazaar</title>
     <link rel="stylesheet" type="text/css" href="../style.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-
+    <script src="../variable.js"></script>
 </head>
 <body class="container">
     
@@ -40,6 +40,9 @@
 
             Name <input type="text" required name="name" id="name">
             Username <input type="text" required name="handle" id="handle">
+            Instagram username <input type="text" required name="instagram" id="handle">
+            Facebook link <input type="text" required name="facebook" id="handle">
+            
             Description <textarea type="textbox" required name="description" id="description" ></textarea>
 
             <div class="cluster">
@@ -60,16 +63,11 @@
         const urlParams = new URLSearchParams(queryString);
         const id = urlParams.get('id');
 
-        const api = "https://qa-zypical-api.herokuapp.com/api/store/";
-        // const api = "http://localhost:3000/api/store/";
-
-        
-        //  
         const form = document.getElementById( "myForm" );
         form.addEventListener( "submit", function ( event ) {
             event.preventDefault();
 
-            activate();
+            update();
         } );
 
 
@@ -80,65 +78,77 @@
             const json = JSON.parse(event.target.response ).data;
             console.log(json);
             
-                document.getElementById("name").value = json.name;
-                document.getElementById("handle").value = json.handle;
-                document.getElementById("description").value = json.description;
+            document.getElementById("name").value = json.name;
+            document.getElementById("handle").value = json.handle;
+            document.getElementById("description").value = json.description;
+            document.getElementById("ig").value = json.socialLinks.instagram;
+            document.getElementById("fb").value = json.socialLinks.facebook || "";
         })
-        xmlHttp.open( "GET", `${api}/${id}`, false ); // false for synchronous request
+        xmlHttp.open( "GET", `${api}/store/${id}`, false ); // false for synchronous request
         xmlHttp.send( null );
 
 
 
 
-    function activate() {
-        console.log("Submitting data ");
-        // document.getElementById(`loader`).style.display = "block";
-        // document.getElementById(`submit`).style.display = "none";
-        const XHR = new XMLHttpRequest();
+        function update() {
+            console.log("Submitting data ");
+            // document.getElementById(`loader`).style.display = "block";
+            // document.getElementById(`submit`).style.display = "none";
+            const XHR = new XMLHttpRequest();
 
-        // Bind the FormData object and the form element
-        const FD = new FormData( form );
-        let object = {};
+            // Bind the FormData object and the form element
+            const FD = new FormData( form );
+            let object = {};
 
-        FD.forEach((value, key) => {
-            console.log(key);
-                object[key] = value;
+            FD.forEach((value, key) => {
+                if(key === "transactionMethod"){
+                    object["transactionMethod"].push(value)
+                }
+                else if(value === "") {
+                    
+                }
+                else if(key === "ig" ) {
+                    object.socialLinks.instagram = value;
+                }
+                else if(key === "fb" ) {
+                    object.socialLinks.facebook = value;
+                }
+                else {
+                    object[key] = value;
+                }
+            });
+
+            // Define what happens on successful data submission
+            XHR.addEventListener( "load", function(event) {
+                document.getElementById(`loader`).style.display = "none";
+                document.getElementById(`done`).style.display = "block";
+                
             
-        });
+            } );
 
-        // Define what happens on successful data submission
-        XHR.addEventListener( "load", function(event) {
-            document.getElementById(`loader`).style.display = "none";
-            document.getElementById(`done`).style.display = "block";
+            // Define what happens in case of error
+            XHR.addEventListener( "error", function( event ) {
+            alert( 'Oops! Something went wrong.' );
+                document.getElementById(`loader`).style.display = "none";
+                document.getElementById(`submit`).style.display = "block";
+                console.log(event);
             
-           
-        } );
+            } );
 
-        // Define what happens in case of error
-        XHR.addEventListener( "error", function( event ) {
-        alert( 'Oops! Something went wrong.' );
-            document.getElementById(`loader`).style.display = "none";
-            document.getElementById(`submit`).style.display = "block";
-            console.log(event);
+            // Set up our request
+            XHR.open( "POST", `${api}/store/activate` );
+            XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+
+            // The data sent is what the user provided in the form        
+            
+             
+            console.log(JSON.stringify(object));
+            
+            XHR.send( json );
+
+        }
         
-        } );
-
-        // Set up our request
-        const api = "http://localhost:3000/api/store/activate"
-        XHR.open( "POST", api );
-        XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-
-        // The data sent is what the user provided in the form        
-        
-        
-        let json = JSON.stringify(object);   
-        console.log(json);
-        
-        XHR.send( json );
-
-    }
-    
     } );
     
 </script>

@@ -9,7 +9,7 @@
     <title>Join Bazaar</title>
     <link rel="stylesheet" type="text/css" href="../style.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-
+    <script src="../variable.js"></script>
 </head>
 <body class="container">
     
@@ -27,13 +27,11 @@
     <div class="form-style white">
 
         <form id="myForm">
-            <input hidden name="userID" value="5f042b7066e52800173b072a">
-
             Enter store username: <input type="text" required name="handle">
-            Enter password: <input type="text" required name="email">
+            Enter temporary password: <input type="text" required name="tempPass">
 
             <div class="cluster">
-                <input type="submit" id="submit" class="upload-button" value="Upload" />
+                <input type="submit" id="submit" class="upload-button" value="Done" />
                 <img src="../img/zypical-spinner.gif" class="loader" id="loader" style="height: 100px;" alt="">
                 <img src="../img/check.png" style="height: 45px;" class="done"   id="done"  alt=""/>
 
@@ -44,65 +42,41 @@
 
 <script>
     window.addEventListener( "load", function () {
+        
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
-        // const id = urlParams.get('id');
-
         const form = document.getElementById( "myForm" );
+        const xmlHttp = new XMLHttpRequest();
+
         form.addEventListener( "submit", function ( event ) {
             event.preventDefault();
-
-            activate();
-        } );
-
-    function activate() {
-        console.log("Submitting data ");
-        // document.getElementById(`loader`).style.display = "block";
-        // document.getElementById(`submit`).style.display = "none";
-        const XHR = new XMLHttpRequest();
-
-        // Bind the FormData object and the form element
-        const FD = new FormData( form );
-        let object = {};
-
-        FD.forEach((value, key) => {
-            console.log(key);
-                object[key] = value;
-            
+            validate(form);
         });
 
-        // Define what happens on successful data submission
-        XHR.addEventListener( "load", function(event) {
-            document.getElementById(`loader`).style.display = "none";
-            document.getElementById(`done`).style.display = "block";
+        function validate(form) {
+            const FD = new FormData( form );
+        
+            let object = {};
+            FD.forEach((value, key) =>  object[key] = value );
             
-           
-        } );
-
-        // Define what happens in case of error
-        XHR.addEventListener( "error", function( event ) {
-        alert( 'Oops! Something went wrong.' );
-            document.getElementById(`loader`).style.display = "none";
-            document.getElementById(`submit`).style.display = "block";
-            console.log(event);
+            // HTTP Request Response
+            xmlHttp.addEventListener( "load", function(event) {
+                const data = JSON.parse(event.target.response);
+                if(data.code !== "SUCCESS") {
+                    alert("Incorrect store username or password");
+                    console.log(data.data);
+                    
+                }
+                else {
+                    window.location.replace(`manageStore.html?id=${data.data._id}`);
+                }
+            })          
+              
+            xmlHttp.open( "POST", `${api}/store/temp/validate`, false ); // false for synchronous request
+            xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xmlHttp.send( JSON.stringify(object));
         
-        } );
-
-        // Set up our request
-        const api = "http://localhost:3000/api/store/activate";
-        XHR.open( "POST", api );
-        XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-
-        // The data sent is what the user provided in the form        
-        
-        
-        let json = JSON.stringify(object);   
-        console.log(json);
-        
-        XHR.send( json );
-
-    }
+        }
     
     } );
     
