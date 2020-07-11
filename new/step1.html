@@ -34,14 +34,14 @@
     </div> 
 
     <div class="form-style">
-        <form>
+        <!-- <form>
             
             <fieldset>
                 Interrupted process? 
                 <input type="text" name="name" required placeholder="Enter store username here *">
                 <a ></a>
             </fieldset>
-        </form>
+        </form> -->
         <form id="myForm">
         <fieldset>
             <input hidden name="createdBy" value="5eff97b9c99ede34e404d08f">
@@ -81,8 +81,13 @@
             <fieldset>
                 <legend>Transaction Method</legend>
                   <div> 
-                    <input type="radio" name="transactionMethod" value="Shipment (Metro Manila only)">Shipment (Metro Manila)
-                    <input type="radio" name="transactionMethod" value="Shipment (Nationwide)">Shipment (Nationwide)
+                    <input type="radio" name="transactionMethod" value="Metro Manila">Metro Manila
+                    <input type="radio" name="transactionMethod" value="Nationwide">Nationwide
+                </div>
+                
+                <div>    
+                    <br><br>
+                    <input type="checkbox"  name="transactionMethod" value="Shipment">COD
                 </div>
                 <div>    
                 <br><br>
