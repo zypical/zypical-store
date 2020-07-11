@@ -10,14 +10,15 @@
     <title>Join Bazaar</title>
     <link rel="stylesheet" type="text/css" href="../style.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-
+    <script src="../variable.js"></script>
+    
 </head>
 <body class="container">
     
     <div class="form-style white">
         
         <div class="cluster">
-            <img src="../img/zypical_black.png" class="logo">
+            <img onclick="goHomeSecondLevel()" src="../img/zypical_black.png" class="logo">
             <br><br>
             <h2 class="heading">Join Virtual Bazaar</h2>   
             
@@ -88,10 +89,6 @@
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const id = urlParams.get('id');
-
-        const api = "https://qa-zypical-api.herokuapp.com/api/store/image";
-        // const api = "http://localhost:3000/api/store/image";
-
         
         // Icon 
         const form = document.getElementById( "myForm" );
@@ -116,7 +113,7 @@
                 upload("cover",form2, api);
             }
             else {
-                alert("You cover file is too large. Please upload less than 500KB")
+                alert("You cover file is too large. Please upload equal or less than 1MB")
             }
         } );
         document.getElementById( "nextBtn").addEventListener( "click", function ( event ) {
@@ -157,22 +154,12 @@
             } );
 
             // Set up our request
-            XHR.open( "POST", api );
+            XHR.open( "POST", `${api}/store/image` );
 
             // The data sent is what the user provided in the form        
             XHR.send( FD );
-
         }
 
-        function checkSize (file) {
-            console.log("Image size: ", file.size);
-            
-            if (file.size > 500000) // 2 mb for bytes.
-            {
-                return false;
-            }
-            return true;
-        }
     
     } );
     

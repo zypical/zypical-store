@@ -10,14 +10,15 @@
     <title>Join Bazaar</title>
     <link rel="stylesheet" type="text/css" href="../style.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="../variable.js"></script>
 
 </head>
 <body class="container">
     
     <div class="form-style white">
     <div class="cluster">
-        <img src="../img/zypical_black.png" class="logo">
-        <br><br>
+        <img onclick="goHomeSecondLevel()" src="../img/zypical_black.png" class="logo">
+            <br><br>
         <h2 class="heading">Join Virtual Bazaar</h2>   
         
         <div class="container-progress">
@@ -33,6 +34,14 @@
     </div> 
 
     <div class="form-style">
+        <form>
+            
+            <fieldset>
+                Interrupted process? 
+                <input type="text" name="name" required placeholder="Enter store username here *">
+                <a ></a>
+            </fieldset>
+        </form>
         <form id="myForm">
         <fieldset>
             <input hidden name="createdBy" value="5eff97b9c99ede34e404d08f">
@@ -41,7 +50,7 @@
             <legend><span class="number">1</span> Store Info</legend>
 
             <input type="text" name="name" required placeholder="Store Name *">
-            <input type="text" name="handle" required placeholder="Store username *">
+            <input type="text" name="handle" autocapitalize="none" required placeholder="Store username *">
             <input type="text" name="ig" required placeholder="Instagram username * (without '@')">
             <input type="text" name="fb" placeholder="Facebook link (optional)">
             <input type="text" name="website" placeholder="Your website link (optional)">
@@ -88,9 +97,12 @@
               </fieldset>
   
         </fieldset>
-        <fieldset>
-            
-        <input type="submit" value="CREATE STORE" />
+        <div class="cluster">
+            <input type="submit" id="submit" value="CREATE STORE" />
+            <img src="../img/zypical-spinner.gif" class="loader" id="loader" style="height: 100px;" alt="">
+            <img src="../img/check.png" style="height: 45px;display: none" class="done"   id="done"  alt=""/>
+        </div>
+
         </form>
         </div>
 </body>
@@ -98,6 +110,9 @@
 <script>
     window.addEventListener( "load", function () {
     function sendData() {
+        
+        document.getElementById(`loader`).style.display = "block";
+        document.getElementById(`submit`).style.display = "none";
         const XHR = new XMLHttpRequest();
 
         // Bind the FormData object and the form element
@@ -111,6 +126,9 @@
             else if(value === "") {
                 
             }
+            else if(key === "handle" ) {
+                object.handle = value.toLowerCase();
+            }
             else if(key === "ig" ) {
                 object.socialLinks.instagram = value;
             }
@@ -121,10 +139,10 @@
                 object[key] = value;
             }
         });
-        let json = JSON.stringify(object);
 
         // Define what happens on successful data submission
         XHR.addEventListener( "load", function(event) {
+            document.getElementById(`loader`).style.display = "none";
             const json = JSON.parse(event.target.response );
             const status = event.target.status;
             console.log(event.target)
@@ -132,11 +150,14 @@
 
             if(status == 400) {
                 alert( json.data );
+            document.getElementById(`submit`).style.display = "block";
             }
             else if(json.code !== "SUCCESS"){
+            document.getElementById(`submit`).style.display = "block";
                 alert('Sorry we are not able to add a store at the moment');
             }
             else {
+            document.getElementById(`done`).style.display = "block";
                 alert("Success! Your store ID is "+json.data)
                 window.location.replace(`step2.html?id=${json.data}`);
 
@@ -146,21 +167,19 @@
 
         // Define what happens in case of error
         XHR.addEventListener( "error", function( event ) {
-        alert( 'Sorry we are not able to add a store at the moment' );
-        console.log(event);
+            alert( 'Sorry we are not able to add a store at the moment' );
+            document.getElementById(`loader`).style.display = "none";
+            document.getElementById(`submit`).style.display = "block";
+            console.log(event);
         
         } );
 
         // Set up our request
-        const api = "https://qa-zypical-api.herokuapp.com/";
-        // const api = "http://localhost:3000/";
-        XHR.open( "POST", `${api}api/store/tempcreate` );
+        XHR.open( "POST", `${api}/store/tempcreate` );
         XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
-        // The data sent is what the user provided in the form
-        console.log(json);
-        
-        XHR.send( json );
+        // The data sent is what the user provided in the form        
+        XHR.send( JSON.stringify(object) );
 
     }
     

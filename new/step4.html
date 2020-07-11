@@ -12,13 +12,13 @@
     <link rel="stylesheet" type="text/css" href="../grid.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" />
-
+    <script src="../variable.js"></script>
 </head>
 <body class="container">
     
     <div class="form-style white">
         <div class="cluster">
-            <img src="../img/zypical_black.png" class="logo">
+            <img onclick="goHomeSecondLevel()" src="../img/zypical_black.png" class="logo">
             <br><br>
             <h2 class="heading">Join Virtual Bazaar</h2>   
             
@@ -54,10 +54,6 @@
         </div>
 </body>
 <script>
-    
-    const api = "https://qa-zypical-api.herokuapp.com/api/store";
-    // const api = "http://localhost:3000/api/store";
-
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const id = urlParams.get('id');
@@ -117,7 +113,7 @@
 
             })
         })
-        xmlHttp.open( "GET", `${api}/${id}`, false ); // false for synchronous request
+        xmlHttp.open( "GET", `${api}/store/${id}`, false ); // false for synchronous request
         xmlHttp.send( null );
         const store = xmlHttp.response;
 
@@ -168,10 +164,7 @@
         } );
 
         // Set up our request
-        // Set up our request
-        const api = "https://qa-zypical-api.herokuapp.com/";
-        // const api = "http://localhost:3000/";
-        XHR.open( "POST", `${api}api/bazaar/join` );
+        XHR.open( "POST", `${api}/bazaar/join` );
         XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
         // The data sent is what the user provided in the form  

@@ -162,19 +162,23 @@
     }
 
     const checkSize = (files) => {
-        
+        let correct = true;
         Object.keys(files).forEach(function(el,index) {
             let file = files[el];
             console.log("File checked: ",file.name);
-            if (file.size > 500000) // 2 mb for bytes.
+            if (file.size > 1500000) // 2 mb for bytes.
             {
-                alert(`File too large for image ${file.name}. Please upload less than 500KB`)
+                alert(`File too large for image ${file.name}. Please upload equal or less than 1MB`)
                 console.log("Image size: ", file.size);
-                return false;
+                correct =  false;
+            }
+            else {
+
             }
         });
+
+        return correct;
             
-        return true;
     }
 
     const goToStore = () => {

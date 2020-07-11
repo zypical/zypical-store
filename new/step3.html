@@ -10,13 +10,13 @@
     <title>Join Bazaar</title>
     <link rel="stylesheet" type="text/css" href="../style.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-
+    <script src="../variable.js"></script>
 </head>
 <body class="container">
     
     <div class="form-style white">
         <div class="cluster">
-            <img src="../img/zypical_black.png" class="logo">
+            <img onclick="goHomeSecondLevel()" src="../img/zypical_black.png" class="logo">
             <br><br>
             <h2 class="heading">Join Virtual Bazaar</h2>   
             
@@ -57,7 +57,7 @@
         </fieldset>
         <div class="cluster">
             <input type="submit" id="submit" value="Upload" />
-            <img src="../img/zypical-spinner.gif" class="loader" style="height: 100px;" id="loader" alt="">
+            <img src="../img/zypical-spinner.gif" class="loader" id="loader" style="height: 100px;" id="loader" alt="">
         </div>
         </form>
         </div>
@@ -123,9 +123,8 @@
         } );
 
         // Set up our request
-        const api = "https://qa-zypical-api.herokuapp.com/";
-        // const api = "http://localhost:3000/";
-        XHR.open( "POST", `${api}api/product/add` );
+        console.log(`${api}/product/add`);
+        XHR.open( "POST", `${api}/product/add` );
 
         // The data sent is what the user provided in the form        
         XHR.send( FD );
@@ -138,25 +137,15 @@
         form.addEventListener( "submit", function ( event ) {
             event.preventDefault();
             const correct = checkSize(document.getElementById("file").files);
+            console.log("Correct file size: ",correct);
             if(correct) {                
+                
                 sendData();
             }
         } );
     } );
     
-    function checkSize (files) {
-        Object.keys(files).forEach(function(el,index) {
-            let file = files[el];
-            if (file.size > 500000) // 2 mb for bytes.
-            {
-                alert(`File too large for image ${file.name}. Please upload less than 500KB`)
-                console.log("Image size: ", file.size);
-                return false;
-            }
-            return true;
-        });
-            
-        }
+    
     
 </script>
 </html>
