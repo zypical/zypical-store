@@ -75,8 +75,6 @@
     const urlParams = new URLSearchParams(queryString);
     const id = urlParams.get('id');
     const xmlHttp = new XMLHttpRequest();
-    
-
     // Elements
     const form = document.getElementById( "myForm" );
     const container = document.getElementById("grid-container");
@@ -92,7 +90,6 @@
         const correct = checkSize(document.getElementById("file").files);
             console.log("Correct file size: ",correct);
         if(correct) {                
-            
             uploadProduct(id);
         }
     } );
@@ -106,7 +103,6 @@
             document.getElementById("loader").style.display = "none";
             const json = JSON.parse(event.target.response );
             const products = json.data.products;
-            console.log(json.data);
 
             // Create grid item
             products.forEach(function(item) {
@@ -147,12 +143,8 @@
             const json = JSON.parse(event.target.response );
             const item = json.data;
             console.log(json);
+            window.location.replace(`upload.html?id=${id}`);
             
-            container.innerHTML += `
-                <div class="grid-item">
-                    <img class="img"   src="https://zypical-images.s3-ap-southeast-1.amazonaws.com/${item.image[0].img}" alt=""> 
-                </div>
-                `;
             form.reset();
         });
         
@@ -160,26 +152,6 @@
         xmlHttp.send( FD );
 
     }
-
-    // const checkSize = (files) => {
-    //     let correct = true;
-    //     Object.keys(files).forEach(function(el,index) {
-    //         let file = files[el];
-    //         console.log("File checked: ",file.name);
-    //         if (file.size > 1500000) // 2 mb for bytes.
-    //         {
-    //             alert(`File too large for image ${file.name}. Please upload equal or less than 1MB`)
-    //             console.log("Image size: ", file.size);
-    //             correct =  false;
-    //         }
-    //         else {
-
-    //         }
-    //     });
-
-    //     return correct;
-            
-    // }
 
     const goToStore = () => {
         window.location.replace(`manageStore.html?id=${id}`);

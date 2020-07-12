@@ -58,11 +58,11 @@
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const id = urlParams.get('id');
+    const form = document.getElementById( "myForm" );
     
     window.addEventListener( "load", function () {
         getStore();
 
-        const form = document.getElementById( "myForm" );
         form.addEventListener( "submit", function ( event ) {
             event.preventDefault();
             updateStore();
