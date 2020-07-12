@@ -161,25 +161,25 @@
 
     }
 
-    const checkSize = (files) => {
-        let correct = true;
-        Object.keys(files).forEach(function(el,index) {
-            let file = files[el];
-            console.log("File checked: ",file.name);
-            if (file.size > 1500000) // 2 mb for bytes.
-            {
-                alert(`File too large for image ${file.name}. Please upload equal or less than 1MB`)
-                console.log("Image size: ", file.size);
-                correct =  false;
-            }
-            else {
+    // const checkSize = (files) => {
+    //     let correct = true;
+    //     Object.keys(files).forEach(function(el,index) {
+    //         let file = files[el];
+    //         console.log("File checked: ",file.name);
+    //         if (file.size > 1500000) // 2 mb for bytes.
+    //         {
+    //             alert(`File too large for image ${file.name}. Please upload equal or less than 1MB`)
+    //             console.log("Image size: ", file.size);
+    //             correct =  false;
+    //         }
+    //         else {
 
-            }
-        });
+    //         }
+    //     });
 
-        return correct;
+    //     return correct;
             
-    }
+    // }
 
     const goToStore = () => {
         window.location.replace(`manageStore.html?id=${id}`);
