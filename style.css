@@ -287,3 +287,6 @@ h2 {
 a.active {
 	font-weight: 600;
 }
+.selected {
+	opacity: 0.5;
+}

@@ -60,13 +60,20 @@
 
     let count = 0;
     let gridType;
-    function updateCount (el) {
-        const check = document.getElementById(el);        
+    function updateCount (el,id) {
+        const check = document.getElementById(el);   
+        const image = document.getElementById("img-" + id);  
         if(check.checked && count > 0) {
             count --;
         } else {
             // Checkbox is not checked..
             count ++
+        }
+        if(!check.checked) {
+            image.className = "img selected";
+        }
+        else {
+            image.className = "img";
         }
 
         if(count === 3 ) {
@@ -102,10 +109,10 @@
                 const container = document.getElementById("grid-container");
                 container.innerHTML += `
                 <div class="grid-item">
-                    <input type="checkbox"  id="check-${item._id}" name="featuredProducts" value="${item._id}" />
+                    <input type="checkbox" hidden id="check-${item._id}" name="featuredProducts" value="${item._id}" />
                     
                     <label for="check-${item._id}">
-                        <img class="img" onclick="updateCount('check-${item._id}')"  src="https://zypical-images.s3-ap-southeast-1.amazonaws.com/${item.image[0].img}" alt=""> 
+                        <img class="img" onclick="updateCount('check-${item._id}','${item._id}')" id="img-${item._id}"  src="https://zypical-images.s3-ap-southeast-1.amazonaws.com/${item.image[0].img}" alt=""> 
                 
                     </label>
                 </div>
