@@ -50,7 +50,7 @@
             <input hidden id="store" name="store" >
             <input type="text" name="name" required placeholder="Name *">
             <input type="number" name="price" required placeholder="Price *">
-            <textarea name="description" maxlength="300" required placeholder="Describe your product" max="300"></textarea>
+            <textarea name="description"   required placeholder="Describe your product" max="300"></textarea>
             
             
   
@@ -63,13 +63,12 @@
         </div>
 </body>
 <script>
-    window.addEventListener( "load", function () {
+    window.addEventListener( "load", async function () {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const id = urlParams.get('id');
-        const count = urlParams.get('count');
-        document.getElementById("count").innerHTML = `You have ${count} product/s`;
-
+        await getCount(id);
+        
     function sendData() {
         console.log("Submitting data...");
         document.getElementById("loader").style.display = "block";
@@ -144,7 +143,27 @@
             }
         } );
     } );
-    
+    const getCount = (id) => {
+        let xmlHttp = new XMLHttpRequest();
+
+        
+        xmlHttp.addEventListener( "load", function(event) {
+            console.log(event.target);
+            const json = JSON.parse(event.target.response );
+            const count= json.data;
+            if(count) {
+                document.getElementById("count").innerHTML = `You have ${count} product/s`;
+
+            }
+            else {
+                document.getElementById("count").innerHTML = `You have 0 product/s`;
+
+            }
+
+        })
+        xmlHttp.open( "GET", `${api}/store/count/product/${id}`, false ); // false for synchronous request
+        xmlHttp.send( null );
+    }
     
     
 </script>
