@@ -150,13 +150,14 @@
         xmlHttp.addEventListener( "load", function(event) {
             console.log(event.target);
             const json = JSON.parse(event.target.response );
+            console.log(json);
             const count= json.data;
-            if(count) {
-                document.getElementById("count").innerHTML = `You have ${count} product/s`;
+            if(json.code !== "SUCCESS") {
+                document.getElementById("count").innerHTML = `You have 0 product/s`;
 
             }
             else {
-                document.getElementById("count").innerHTML = `You have 0 product/s`;
+                document.getElementById("count").innerHTML = `You have ${count} product/s`;
 
             }
 

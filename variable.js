@@ -1,6 +1,6 @@
 
-// const api = "https://qa-zypical-api.herokuapp.com/api";
-const api = "http://localhost:3000/api";
+const api = "https://qa-zypical-api.herokuapp.com/api";
+// const api = "http://localhost:3000/api";
 
 const goHomeSecondLevel = () => {
     window.location.replace("../index.html");
