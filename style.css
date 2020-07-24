@@ -4,6 +4,12 @@
 .green {
 	color: #236E6E
 }
+.next {
+	text-decoration: none;
+    color: #2BACB0;
+    font-size: 1.4em;
+    margin-right: 5px;
+}
 .container-progress {
 	/* width: 100%;
 	margin: 15px  auto;  */
