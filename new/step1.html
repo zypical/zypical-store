@@ -51,7 +51,11 @@
 
             <input type="text" name="name" required placeholder="Store Name *">
             <input type="text" name="handle" autocapitalize="none" required placeholder="Store username *">
-            <input type="text" name="ig" required placeholder="Instagram username * (WITHOUT '@')">
+            <div style="position: relative">
+                <label style="position: absolute; top: 10px;  left: 10px; color: gray">@</label>
+                <input style="padding-left: 26px" type="text" name="ig" required placeholder="Instagram username *">
+            </div>
+            
             <input type="text" name="fb" placeholder="Facebook link (optional)">
             <input type="text" name="website" placeholder="Your website link (optional)">
 
