@@ -11,9 +11,9 @@ const checkSize = (files) => {
     Object.keys(files).forEach(function(el,index) {
         let file = files[el];
         console.log("File checked: ",file.name);
-        if (file.size > 1500000) // 2 mb for bytes.
+        if (file.size > 4000000) // 4 mb for bytes.
         {
-            alert(`File too large for image ${file.name}. Please upload equal or less than 1.5MB`)
+            alert(`File too large for image ${file.name}. Please upload equal or less than 4MB`)
             console.log("Image size: ", file.size);
             correct =  false;
         }
